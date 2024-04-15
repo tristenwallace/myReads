@@ -11,6 +11,29 @@ body,
   background: white;
 }
 
+/* Navbar */
+
+.navbar {
+  background-color: #333;
+  color: white;
+  padding: 5px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+.nav-links li {
+  padding: 5px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+}
+
 /* main page */
 
 .list-books-title {
@@ -78,7 +101,7 @@ body,
 }
 .search-books-input-wrapper {
   flex: 1;
-  background: #e9e;
+  background: #b3ecf1;
 }
 .search-books-bar input {
   width: 100%;

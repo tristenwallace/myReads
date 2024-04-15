@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
+import MainPage from './pages/MainPage';
+import SearchPage from './pages/SearchPage';
 
 function App() {
   const [books, setBooks] = useState([]);
-  const [showSearchPage, setShowSearchPage] = useState(false); // This might be deprecated
 
   useEffect(() => {
     BooksAPI.getAll().then(data => {
@@ -13,34 +14,26 @@ function App() {
     });
   }, []);
 
+  const handleShelfChange = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(() => {
+      setBooks(currentBooks => {
+        return currentBooks.map(b => {
+          if (b.id === book.id) {
+            return { ...b, shelf };  // Create a new object with the updated shelf
+          }
+          return b;
+        });
+      });
+    });
+  };
+      
+
   return (
     <div className="app">
       <Routes>
-        <Route path="/" element={<MainPage books={books} />} />
-        <Route path="/search" element={<SearchPage />} />
+        <Route path="/" element={<MainPage books={books} onShelfChange={handleShelfChange} />} />
+        <Route path="/search" element={<SearchPage onShelfChange={handleShelfChange} booksOnShelves={books} />} />
       </Routes>
-    </div>
-  );
-}
-
-function MainPage({ books }) {
-  return (
-    <div>
-      {/* Placeholder for main page content, will be replaced with actual components */}
-      <h1>MyReads</h1>
-      {/* Add navigation link to Search Page */}
-      <Link to="/search">Search for books</Link>
-    </div>
-  );
-}
-
-function SearchPage() {
-  return (
-    <div>
-      {/* Placeholder for search page content */}
-      <h1>Search Books</h1>
-      {/* Add navigation link to Home Page */}
-      <Link to="/">Back to Home</Link>
     </div>
   );
 }
