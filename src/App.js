@@ -16,8 +16,14 @@ function App() {
 
   const handleShelfChange = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
-      book.shelf = shelf;
-      setBooks(books.map(b => b.id === book.id ? book : b));
+      setBooks(currentBooks => {
+        return currentBooks.map(b => {
+          if (b.id === book.id) {
+            return { ...b, shelf };  // Create a new object with the updated shelf
+          }
+          return b;
+        });
+      });
     });
   };
       
@@ -26,7 +32,7 @@ function App() {
     <div className="app">
       <Routes>
         <Route path="/" element={<MainPage books={books} onShelfChange={handleShelfChange} />} />
-        <Route path="/search" element={<SearchPage onShelfChange={handleShelfChange} books={books} />} />
+        <Route path="/search" element={<SearchPage onShelfChange={handleShelfChange} booksOnShelves={books} />} />
       </Routes>
     </div>
   );
